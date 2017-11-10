@@ -19,6 +19,7 @@
   "dependencies": {
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
+    "prompt-promise": "^1.0.3",
     "sequelize": "^4.22.5",
     "sequelize-cli": "^3.0.0"
   }
