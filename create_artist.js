@@ -33,6 +33,7 @@ function writeArtist (artist_name) {
   db.artist.create({name: artist_name})
   .then(function (artist) {
     console.log(artist);
+    db.sequelize.close();
   });
 }
 

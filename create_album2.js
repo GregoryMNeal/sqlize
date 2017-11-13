@@ -10,8 +10,7 @@ var db = require('./models');  // for accessing the database via sequelize
 
 
 // Define a Promise for prompting the User for inputs
-var getUserInputs = new Promise(
-  function (resolve, reject) {
+var getUserInputs = new Promise(function (resolve, reject) {
     var inputs = [];
     // Prompt for the album name
     prompt('Please enter the album name: ')
@@ -48,19 +47,43 @@ function writeAlbum (album_name, album_year, artist_id) {
   });
 }
 
-// Define main driver function
-var main = function () {
-  getUserInputs
-    .then(function (inputs) {
-      var album_name = inputs[0];
-      var album_year = inputs[1];
-      var artist_id = inputs[2];
-      writeAlbum(album_name, album_year, artist_id);
+// Enter an album
+var enterAlbum = new Promise (function (resolve, reject) {
+    getUserInputs
+      .then(function (inputs) {
+        var album_name = inputs[0];
+        var album_year = inputs[1];
+        var artist_id = inputs[2];
+        writeAlbum(album_name, album_year, artist_id);
+        return prompt('Would you like to enter another? ');
+      })
+      .then(function (another) {
+        prompt.done();
+        resolve(another);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  }
+);
+
+// Define main function
+function main (quit) {
+  enterAlbum
+    .then(function (another) {
+      if (another != 'Y' || another != 'y') {
+        quit = true;
+      } else {
+        quit = false;
+      }
     })
     .catch(function (error) {
       console.error(error);
     });
 }
 
-// Execute the main function
-main();
+// Execute main function
+var quit = false;
+while (quit == false) {
+  main(quit);
+}
